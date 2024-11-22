@@ -8,11 +8,11 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   return (
-    <>
+    <div className="container p-4">
       <Outlet />
 
       <TanStackRouterDevtools />
       <ReactQueryDevtools />
-    </>
+    </div>
   )
 }
