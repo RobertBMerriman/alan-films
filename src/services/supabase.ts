@@ -110,6 +110,23 @@ export function useAddFilm() {
   })
 }
 
+interface AddUsersFilms {
+  userId: string
+  filmId: number
+  state: 'interested' | 'maybe'
+}
+
+export function useUpsertUsersFilms() {
+  return useMutation({
+    mutationFn: async ({ userId, filmId, state }: AddUsersFilms) => {
+      return await supabase
+        .from('users_films')
+        .upsert([{ user_id: userId, film_id: filmId, state }])
+        .select()
+    },
+  })
+}
+
 interface UpdateLoggedInUserName {
   id: string
   name: string

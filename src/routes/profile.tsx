@@ -12,7 +12,6 @@ function RouteComponent() {
 
   if (isLoading) return <P>Loading...</P>
   if (!isSuccess) return <P>Error</P>
-  if (user.error) return <P>Error</P>
 
-  return <Profile id={user.data.user.id} />
+  return <Profile id={user.id} />
 }
