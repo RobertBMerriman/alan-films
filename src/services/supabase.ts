@@ -12,7 +12,9 @@ export function useSignIn() {
     queryKey: ['supabase-sign-in'],
     queryFn: async () => {
       return await supabase.auth.signInWithPassword({
-        email: 'robertbmerriman@gmail.com',
+        // email: 'robertbmerriman@gmail.com',
+        // email: 'therobz12@gmail.com',
+        email: 'robert@alteam.io',
         password: import.meta.env.VITE_TEMP_PW,
       })
     },
@@ -58,6 +60,19 @@ export function useAddFilm() {
         .from('films')
         .insert([{ film_id: id, added_user_id: userId }])
         .select()
+    },
+  })
+}
+
+interface UpdateLoggedInUserName {
+  id: string
+  name: string
+}
+
+export function useUpdateName() {
+  return useMutation({
+    mutationFn: async ({ id, name }: UpdateLoggedInUserName) => {
+      return await supabase.from('users').update({ name }).eq('id', id).select()
     },
   })
 }
