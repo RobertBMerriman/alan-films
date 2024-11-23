@@ -12,11 +12,10 @@ function RouteComponent() {
 
   if (isLoading) return <P>Loading...</P>
   if (!isSuccess) return <P>Error</P>
-  if (films.error) return <P>Error</P>
 
   return (
     <>
-      {films.data.map((film) => (
+      {films.map((film) => (
         <FilmDetail key={film.id} film={film} />
       ))}
     </>

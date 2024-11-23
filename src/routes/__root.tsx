@@ -10,11 +10,11 @@ export const Route = createRootRoute({
 })
 
 function RootComponent() {
-  const { data: signIn, isSuccess, isLoading } = useSignIn()
+  // TODO store sign in + public user
+  const { isSuccess, isLoading } = useSignIn()
 
   if (isLoading) return <P>Loading...</P>
   if (!isSuccess) return <P>Sign in FAILED</P>
-  if (signIn.error) return <P>Sign in FAILED</P>
 
   return (
     <div className="flex flex-col gap-4 p-4 lg:container">

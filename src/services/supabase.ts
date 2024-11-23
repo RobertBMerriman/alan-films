@@ -11,12 +11,15 @@ export function useSignIn() {
   return useQuery({
     queryKey: ['supabase-sign-in'],
     queryFn: async () => {
-      return await supabase.auth.signInWithPassword({
+      const res = await supabase.auth.signInWithPassword({
         // email: 'robertbmerriman@gmail.com',
         // email: 'therobz12@gmail.com',
         email: 'robert@alteam.io',
         password: import.meta.env.VITE_TEMP_PW,
       })
+
+      if (res.error) throw new Error(res.error.message)
+      return res.data
     },
   })
 }
@@ -25,7 +28,10 @@ export function useAuthedUser() {
   return useQuery({
     queryKey: ['supabase-authed-user'],
     queryFn: async () => {
-      return await supabase.auth.getUser()
+      const res = await supabase.auth.getUser()
+
+      if (res.error) throw new Error(res.error.message)
+      return res.data.user
     },
   })
 }
@@ -34,8 +40,24 @@ export function usePublicUser(id: string) {
   return useQuery({
     queryKey: ['supabase-public-user', id],
     queryFn: async () => {
-      return await supabase.from('users').select().eq('id', id).limit(1)
+      const res = await supabase.from('users').select().eq('id', id).limit(1).single()
+
+      if (res.error) throw new Error(res.error.message)
+      return res.data
     },
+  })
+}
+
+export function usePublicUsers() {
+  return useQuery({
+    queryKey: ['supabase-public-users'],
+    queryFn: async () => {
+      const res = await supabase.from('users').select().order('id')
+
+      if (res.error) throw new Error(res.error.message)
+      return res.data
+    },
+    staleTime: Infinity,
   })
 }
 
@@ -43,7 +65,31 @@ export function useGetFilms() {
   return useQuery({
     queryKey: ['supabase-get-films'],
     queryFn: async () => {
-      return await supabase.from('films').select('*').order('created_at', { ascending: false })
+      const res = await supabase
+        .from('films')
+        .select('*, users!users_films ( * )')
+        .order('created_at', { ascending: false })
+
+      if (res.error) throw new Error(res.error.message)
+      return res.data
+    },
+  })
+}
+
+export function useGetUsersFilms(userId: string, filmId: number) {
+  return useQuery({
+    queryKey: ['supabase-get-users-films', userId, filmId],
+    queryFn: async () => {
+      const res = await supabase
+        .from('users_films')
+        .select('state')
+        .eq('user_id', userId)
+        .eq('film_id', filmId)
+        .limit(1)
+        .single()
+
+      if (res.error) throw new Error(res.error.message)
+      return res.data
     },
   })
 }

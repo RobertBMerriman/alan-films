@@ -1,16 +1,25 @@
+import type { Tables } from 'database.types'
+
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { usePublicUser } from '@/services/supabase'
+import { cn } from '@/lib/utils'
+import { useGetUsersFilms } from '@/services/supabase'
 
 interface Props {
-  id: string
+  user: Tables<'users'>
+  filmId: number
 }
 
-function UserAvatar({ id }: Props) {
-  const { data: user } = usePublicUser(id)
+function UserAvatar({ user, filmId }: Props) {
+  const { data, error } = useGetUsersFilms(user.id, filmId)
+  if (error) {
+    console.log(error)
+  }
+  const state = data?.state as 'interested' | 'maybe' | undefined
+  const cl = !state || state === 'maybe' ? 'opacity-50' : ''
 
   return (
-    <Avatar>
-      <AvatarFallback>{user?.data?.at(0)?.name?.at(0) ?? '-'}</AvatarFallback>
+    <Avatar className={cn('cursor-pointer select-none')}>
+      <AvatarFallback className={cl}>{user.name?.at(0) ?? '-'}</AvatarFallback>
     </Avatar>
   )
 }

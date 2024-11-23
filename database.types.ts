@@ -40,21 +40,57 @@ export type Database = {
       }
       users: {
         Row: {
+          created_at: string
           email: string
           id: string
           name: string | null
         }
         Insert: {
+          created_at?: string
           email: string
           id: string
           name?: string | null
         }
         Update: {
+          created_at?: string
           email?: string
           id?: string
           name?: string | null
         }
         Relationships: []
+      }
+      users_films: {
+        Row: {
+          film_id: number
+          state: string | null
+          user_id: string
+        }
+        Insert: {
+          film_id: number
+          state?: string | null
+          user_id: string
+        }
+        Update: {
+          film_id?: number
+          state?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "users_films_film_id_fkey"
+            columns: ["film_id"]
+            isOneToOne: false
+            referencedRelation: "films"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_films_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

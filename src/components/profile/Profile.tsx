@@ -16,28 +16,23 @@ function Profile({ id }: Props) {
   const { data: user, refetch, isFetching } = usePublicUser(id)
   const { mutate, isPending } = useUpdateName()
 
-  const loggedInUser = user?.data?.at(0)
-
   useLayoutEffect(() => {
-    if (loggedInUser && loggedInUser.name) {
-      setEditName(loggedInUser.name)
+    if (user && user.name) {
+      setEditName(user.name)
     }
-  }, [loggedInUser])
+  }, [user])
 
   if (!user) return <P>Loading</P>
-  if (!loggedInUser) return <P>Error</P>
 
   return (
     <div className="flex flex-row gap-4">
       <Avatar>
-        <AvatarFallback>{loggedInUser.name?.at(0) ?? ''}</AvatarFallback>
+        <AvatarFallback>{user.name?.at(0) ?? ''}</AvatarFallback>
       </Avatar>
       <Input value={editName} onChange={(e) => setEditName(e.target.value)} />
       <Button
-        disabled={isFetching || isPending || !editName || editName === loggedInUser.name}
-        onClick={() =>
-          mutate({ id: loggedInUser.id, name: editName }, { onSettled: () => refetch() })
-        }
+        disabled={isFetching || isPending || !editName || editName === user.name}
+        onClick={() => mutate({ id: user.id, name: editName }, { onSettled: () => refetch() })}
       >
         Save
       </Button>

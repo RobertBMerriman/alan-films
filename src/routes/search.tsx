@@ -24,7 +24,7 @@ function RouteComponent() {
   const { mutate } = useAddFilm()
 
   function handleAddFilm(id: number) {
-    const userId = user?.data.user?.id
+    const userId = user?.id
     if (!userId) {
       alert('Not logged in')
       return
@@ -33,7 +33,7 @@ function RouteComponent() {
     mutate({ id, userId }, { onSettled: () => refetch() })
   }
 
-  const filmIds = films?.data?.map((film) => film.film_id) ?? []
+  const filmIds = films?.map((film) => film.film_id) ?? []
 
   return (
     <>

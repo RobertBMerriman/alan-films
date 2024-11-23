@@ -61,7 +61,7 @@ export function useSearchMovies(query: string, page = 1) {
         options,
       )
       if (!res.ok) {
-        throw new Error('Network response error')
+        throw new Error(`Network response error: ${res.status}`)
       }
 
       return (await res.json()) as MovieSearch
@@ -89,7 +89,7 @@ export function useGetMovie(id: number) {
         options,
       )
       if (!res.ok) {
-        throw new Error('Network response error')
+        throw new Error(`Network response error: ${res.status}`)
       }
 
       return (await res.json()) as MovieDetail
@@ -111,7 +111,7 @@ export function usePopularMovies(page = 1) {
         options,
       )
       if (!res.ok) {
-        throw new Error('Network response error')
+        throw new Error(`Network response error: ${res.status}`)
       }
 
       return (await res.json()) as MovieSearch
