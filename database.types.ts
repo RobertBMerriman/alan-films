@@ -11,19 +11,48 @@ export type Database = {
     Tables: {
       films: {
         Row: {
+          added_user_id: string
           created_at: string
           film_id: number
           id: number
         }
         Insert: {
+          added_user_id: string
           created_at?: string
           film_id: number
           id?: number
         }
         Update: {
+          added_user_id?: string
           created_at?: string
           film_id?: number
           id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "films_added_user_id_fkey"
+            columns: ["added_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          email: string
+          id: string
+          name: string | null
+        }
+        Insert: {
+          email: string
+          id: string
+          name?: string | null
+        }
+        Update: {
+          email?: string
+          id?: string
+          name?: string | null
         }
         Relationships: []
       }

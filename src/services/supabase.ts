@@ -19,6 +19,24 @@ export function useSignIn() {
   })
 }
 
+export function useAuthedUser() {
+  return useQuery({
+    queryKey: ['supabase-authed-user'],
+    queryFn: async () => {
+      return await supabase.auth.getUser()
+    },
+  })
+}
+
+export function usePublicUser(id: string) {
+  return useQuery({
+    queryKey: ['supabase-public-user', id],
+    queryFn: async () => {
+      return await supabase.from('users').select().eq('id', id).limit(1)
+    },
+  })
+}
+
 export function useGetFilms() {
   return useQuery({
     queryKey: ['supabase-get-films'],
@@ -28,12 +46,17 @@ export function useGetFilms() {
   })
 }
 
+interface AddFilm {
+  id: number
+  userId: string
+}
+
 export function useAddFilm() {
   return useMutation({
-    mutationFn: async (id: number) => {
+    mutationFn: async ({ id, userId }: AddFilm) => {
       return await supabase
         .from('films')
-        .insert([{ film_id: id }])
+        .insert([{ film_id: id, added_user_id: userId }])
         .select()
     },
   })

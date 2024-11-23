@@ -12,7 +12,7 @@ const options = {
 const BASE_URL = 'https://api.themoviedb.org/3'
 
 function url(url: string, query?: Record<string, string>) {
-  const queryString = query && `?${new URLSearchParams(query).toString()}`
+  const queryString = query ? `?${new URLSearchParams(query).toString()}` : ''
 
   return `${BASE_URL}${url}${queryString}`
 }
@@ -64,7 +64,7 @@ export function useSearchMovies(query: string, page = 1) {
     enabled: !!deboucedQuery,
     staleTime: 60 * 60 * 1000,
     refetchOnMount: false,
-    placeholderData: (data) => data,
+    // placeholderData: (data) => data,
   })
 }
 
@@ -93,6 +93,28 @@ export function useGetMovie(id: number) {
       }
 
       return (await res.json()) as Movie
+    },
+    staleTime: 60 * 60 * 1000,
+  })
+}
+
+export function usePopularMovies(page = 1) {
+  return useQuery({
+    queryKey: ['popular-movies', page],
+    queryFn: async () => {
+      const res = await fetch(
+        url(`/movie/popular`, {
+          language: 'en-GB',
+          page: String(page),
+          region: 'GB',
+        }),
+        options,
+      )
+      if (!res.ok) {
+        throw new Error('Network response error')
+      }
+
+      return (await res.json()) as MovieSearch
     },
     staleTime: 60 * 60 * 1000,
   })

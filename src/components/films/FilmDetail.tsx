@@ -1,5 +1,6 @@
 import type { Tables } from 'database.types'
 
+import UserAvatar from '@/components/profile/UserAvatar'
 import { H3, P } from '@/components/ui/typeography'
 import { tmdbImageUrl, useGetMovie } from '@/services/tmdb'
 
@@ -25,6 +26,9 @@ function FilmDetail({ film }: Props) {
           <P className="text-muted-foreground">{new Date(movie.release_date).getFullYear()}</P>
         </div>
         <P className="line-clamp-5 md:line-clamp-3">{movie.overview}</P>
+        <div>
+          <UserAvatar id={film.added_user_id} />
+        </div>
       </div>
     </div>
   )

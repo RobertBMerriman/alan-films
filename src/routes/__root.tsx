@@ -25,6 +25,9 @@ function RootComponent() {
         <Link to="/search">
           {({ isActive }) => <Button variant={isActive ? 'default' : 'outline'}>Search</Button>}
         </Link>
+        <Link to="/profile">
+          {({ isActive }) => <Button variant={isActive ? 'default' : 'outline'}>Profile</Button>}
+        </Link>
       </div>
       <Outlet />
 
