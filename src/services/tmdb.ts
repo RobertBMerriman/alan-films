@@ -24,14 +24,18 @@ export function tmdbImageUrl(
   return `https://image.tmdb.org/t/p/${size}${url}`
 }
 
+export interface MovieResult {
+  id: number
+  title: string
+  overview: string
+  release_date: string
+  poster_path: string
+  // And more ofc
+}
+
 interface MovieSearch {
   page: number
-  results: {
-    id: number
-    title: string
-    overview: string
-    // And more ofc
-  }[]
+  results: MovieResult[]
   total_pages: number
   total_results: number
 }
@@ -42,6 +46,8 @@ export function useSearchMovies(query: string, page = 1) {
     500,
   )
 
+  // const { data: popularMovies } = usePopularMovies()
+
   return useQuery({
     queryKey: ['search-movies', deboucedQuery, debouncedPage],
     queryFn: async () => {
@@ -49,7 +55,6 @@ export function useSearchMovies(query: string, page = 1) {
         url('/search/movie', {
           query: deboucedQuery,
           page: String(debouncedPage),
-          include_adult: 'true',
           language: 'en-GB',
           region: 'GB',
         }),
@@ -64,18 +69,13 @@ export function useSearchMovies(query: string, page = 1) {
     enabled: !!deboucedQuery,
     staleTime: 60 * 60 * 1000,
     refetchOnMount: false,
-    // placeholderData: (data) => data,
+    // placeholderData: (data) => data ?? popularMovies,
+    // placeholderData: (data) => data ?? (deboucedQuery ? data : popularMovies),
   })
 }
 
-interface Movie {
-  id: number
-  title: string
-  overview: string
+export interface MovieDetail extends MovieResult {
   status: string
-  release_date: string
-  poster_path: string
-  // And more ofc
 }
 
 export function useGetMovie(id: number) {
@@ -92,7 +92,7 @@ export function useGetMovie(id: number) {
         throw new Error('Network response error')
       }
 
-      return (await res.json()) as Movie
+      return (await res.json()) as MovieDetail
     },
     staleTime: 60 * 60 * 1000,
   })

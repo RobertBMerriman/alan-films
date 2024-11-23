@@ -1,8 +1,9 @@
 import { useState } from 'react'
 
+import Film from '@/components/films/Film'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { H3, P } from '@/components/ui/typeography'
+import { P } from '@/components/ui/typeography'
 import { useAddFilm, useAuthedUser, useGetFilms } from '@/services/supabase'
 import { usePopularMovies, useSearchMovies } from '@/services/tmdb'
 import { createFileRoute } from '@tanstack/react-router'
@@ -38,27 +39,33 @@ function RouteComponent() {
     <>
       <Input onChange={(e) => setMovieSearch(e.target.value)} placeholder="Search for a movie..." />
 
-      {movies?.results.length
+      {movies?.results.length === 0 && <P>No results</P>}
+
+      {movies
         ? movies.results.map((movie) => (
-            <div key={movie.id}>
-              <H3>{movie.title}</H3>
-              <P className="line-clamp-3">{movie.overview}</P>
-              <Button disabled={filmIds.includes(movie.id)} onClick={() => handleAddFilm(movie.id)}>
-                Add
-              </Button>
-            </div>
+            <Film key={movie.id} movie={movie}>
+              <div>
+                <Button
+                  disabled={filmIds.includes(movie.id)}
+                  onClick={() => handleAddFilm(movie.id)}
+                >
+                  Add
+                </Button>
+              </div>
+            </Film>
           ))
         : popularMovies?.results.map((movie) => (
-            <div key={movie.id}>
-              <H3>{movie.title}</H3>
-              <P className="line-clamp-3">{movie.overview}</P>
-              <Button disabled={filmIds.includes(movie.id)} onClick={() => handleAddFilm(movie.id)}>
-                Add
-              </Button>
-            </div>
+            <Film key={movie.id} movie={movie}>
+              <div>
+                <Button
+                  disabled={filmIds.includes(movie.id)}
+                  onClick={() => handleAddFilm(movie.id)}
+                >
+                  Add
+                </Button>
+              </div>
+            </Film>
           ))}
-
-      {movies?.results.length === 0 && <P>No results</P>}
     </>
   )
 }
