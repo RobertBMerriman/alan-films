@@ -16,7 +16,7 @@ export const Route = createFileRoute('/search')({
 function RouteComponent() {
   const [movieSearch, setMovieSearch] = useState('')
 
-  const { data: user } = useAuthedUser()
+  const { data: user } = useAuthedUser(true)
 
   const { data: popularMovies } = usePopularMovies()
   const { data: movies } = useSearchMovies(movieSearch)

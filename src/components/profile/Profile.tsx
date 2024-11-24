@@ -4,7 +4,13 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { P } from '@/components/ui/typeography'
-import { usePublicUser, useUpdateName } from '@/services/supabase'
+import {
+  useAuthedUser,
+  useGetSession,
+  usePublicUser,
+  useSignOut,
+  useUpdateName,
+} from '@/services/supabase'
 
 interface Props {
   id: string
@@ -13,8 +19,12 @@ interface Props {
 function Profile({ id }: Props) {
   const [editName, setEditName] = useState('')
 
-  const { data: user, refetch, isFetching } = usePublicUser(id)
-  const { mutate, isPending } = useUpdateName()
+  const { mutate: signOut } = useSignOut()
+
+  const { refetch: refetchSession } = useGetSession()
+  const { refetch: refetchUser } = useAuthedUser(true)
+  const { data: user, refetch: refetchPublicUser, isFetching } = usePublicUser(id)
+  const { mutate: updateName, isPending } = useUpdateName()
 
   useLayoutEffect(() => {
     if (user && user.name) {
@@ -25,17 +35,35 @@ function Profile({ id }: Props) {
   if (!user) return <P>Loading</P>
 
   return (
-    <div className="flex flex-row gap-4">
-      <Avatar>
-        <AvatarFallback>{user.name?.at(0) ?? ''}</AvatarFallback>
-      </Avatar>
-      <Input value={editName} onChange={(e) => setEditName(e.target.value)} />
-      <Button
-        disabled={isFetching || isPending || !editName || editName === user.name}
-        onClick={() => mutate({ id: user.id, name: editName }, { onSettled: () => refetch() })}
-      >
-        Save
-      </Button>
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-row gap-4">
+        <Avatar>
+          <AvatarFallback>{user.name?.at(0) ?? ''}</AvatarFallback>
+        </Avatar>
+        <Input value={editName} onChange={(e) => setEditName(e.target.value)} />
+        <Button
+          disabled={isFetching || isPending || !editName || editName === user.name}
+          onClick={() =>
+            updateName({ id: user.id, name: editName }, { onSettled: () => refetchPublicUser() })
+          }
+        >
+          Save
+        </Button>
+      </div>
+      <div>
+        <Button
+          onClick={() =>
+            signOut(undefined, {
+              onSettled: () => {
+                refetchSession()
+                refetchUser()
+              },
+            })
+          }
+        >
+          Sign out
+        </Button>
+      </div>
     </div>
   )
 }

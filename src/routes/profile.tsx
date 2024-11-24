@@ -1,6 +1,8 @@
 import Profile from '@/components/profile/Profile'
+// import ProfileUserCheck from '@/components/profile/ProfileUserCheck'
+import SignIn from '@/components/profile/SignIn'
 import { P } from '@/components/ui/typeography'
-import { useAuthedUser } from '@/services/supabase'
+import { useAuthedUser, useGetSession } from '@/services/supabase'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/profile')({
@@ -8,10 +10,12 @@ export const Route = createFileRoute('/profile')({
 })
 
 function RouteComponent() {
-  const { data: user, isSuccess, isLoading } = useAuthedUser()
+  const { data: session, isLoading: isLoadingSession } = useGetSession()
+  const { data: user, isLoading: isLoadingUser } = useAuthedUser(!!session?.session)
 
-  if (isLoading) return <P>Loading...</P>
-  if (!isSuccess) return <P>Error</P>
+  if (isLoadingSession) return <P>Loading session...</P>
+  if (isLoadingUser) return <P>Loading user...</P>
 
-  return <Profile id={user.id} />
+  // return <ProfileUserCheck />
+  return <>{session?.session && user ? <Profile id={user.id} /> : <SignIn />}</>
 }

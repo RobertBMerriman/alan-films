@@ -7,16 +7,46 @@ const supabaseUrl = 'https://xhifbxvkghdfimmdvqjf.supabase.co'
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY
 const supabase = createClient<Database>(supabaseUrl, supabaseKey)
 
+interface SignIn {
+  email: string
+  password: string
+}
+
 export function useSignIn() {
-  return useQuery({
-    queryKey: ['supabase-sign-in'],
-    queryFn: async () => {
+  return useMutation({
+    mutationFn: async ({ email, password }: SignIn) => {
       const res = await supabase.auth.signInWithPassword({
         // email: 'robertbmerriman@gmail.com',
         // email: 'therobz12@gmail.com',
-        email: 'robert@alteam.io',
-        password: import.meta.env.VITE_TEMP_PW,
+        // email: 'robert@alteam.io',
+        email,
+        // password: import.meta.env.VITE_TEMP_PW,
+        password,
       })
+
+      if (res.error) throw new Error(res.error.message)
+      return res.data
+    },
+    retry: false,
+  })
+}
+
+export function useSignOut() {
+  return useMutation({
+    mutationFn: async () => {
+      const res = await supabase.auth.signOut({ scope: 'local' })
+
+      if (res.error) throw new Error(res.error.message)
+      return res
+    },
+  })
+}
+
+export function useGetSession() {
+  return useQuery({
+    queryKey: ['supabase-get-session'],
+    queryFn: async () => {
+      const res = await supabase.auth.getSession()
 
       if (res.error) throw new Error(res.error.message)
       return res.data
@@ -24,7 +54,7 @@ export function useSignIn() {
   })
 }
 
-export function useAuthedUser() {
+export function useAuthedUser(session = false) {
   return useQuery({
     queryKey: ['supabase-authed-user'],
     queryFn: async () => {
@@ -33,6 +63,8 @@ export function useAuthedUser() {
       if (res.error) throw new Error(res.error.message)
       return res.data.user
     },
+    enabled: session,
+    retry: false,
   })
 }
 

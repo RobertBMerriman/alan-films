@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { P } from '@/components/ui/typeography'
-import { useSignIn } from '@/services/supabase'
+import { useAuthedUser, useGetSession } from '@/services/supabase'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Link, Outlet, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
@@ -11,16 +10,16 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   // TODO store sign in + public user
-  const { isSuccess, isLoading } = useSignIn()
 
-  if (isLoading) return <P>Loading...</P>
-  if (!isSuccess) return <P>Sign in FAILED</P>
+  // Preload session
+  useGetSession()
+  useAuthedUser(true)
 
   return (
     <div className="flex flex-col gap-4 p-4 lg:container">
       <div className="flex flex-row gap-3">
         <Link to="/">
-          {({ isActive }) => <Button variant={isActive ? 'default' : 'outline'}>Home</Button>}
+          {({ isActive }) => <Button variant={isActive ? 'default' : 'outline'}>List</Button>}
         </Link>
         <Link to="/search">
           {({ isActive }) => <Button variant={isActive ? 'default' : 'outline'}>Search</Button>}
