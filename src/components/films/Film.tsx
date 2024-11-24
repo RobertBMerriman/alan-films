@@ -16,7 +16,10 @@ function Film({ movie, children }: Props) {
         <div className="flex flex-col justify-between gap-1 md:flex-row md:items-baseline md:gap-2">
           <H3>{movie.title}</H3>
           <div className="flex flex-row gap-2">
-            <P className="text-muted-foreground">{new Date(movie.release_date).getFullYear()}</P>
+            {/* Solve NaN issue */}
+            <P className="text-muted-foreground">
+              {new Date(movie.release_date).getFullYear().toString()}
+            </P>
             {'status' in movie && movie.status !== 'Released' && (
               <P className="text-muted-foreground">{movie.status}</P>
             )}

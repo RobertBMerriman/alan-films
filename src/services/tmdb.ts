@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import { useQuery } from '@tanstack/react-query'
 import { useDebounce } from '@uidotdev/usehooks'
 
@@ -41,12 +43,9 @@ interface MovieSearch {
 }
 
 export function useSearchMovies(query: string, page = 1) {
-  const { query: deboucedQuery, page: debouncedPage } = useDebounce(
-    { query: query.trim(), page },
-    500,
-  )
+  const memo = useMemo(() => ({ query: query.trim(), page }), [page, query])
 
-  // const { data: popularMovies } = usePopularMovies()
+  const { query: deboucedQuery, page: debouncedPage } = useDebounce(memo, 500)
 
   return useQuery({
     queryKey: ['search-movies', deboucedQuery, debouncedPage],
@@ -66,11 +65,9 @@ export function useSearchMovies(query: string, page = 1) {
 
       return (await res.json()) as MovieSearch
     },
-    enabled: !!deboucedQuery,
     staleTime: 60 * 60 * 1000,
     refetchOnMount: false,
-    // placeholderData: (data) => data ?? popularMovies,
-    // placeholderData: (data) => data ?? (deboucedQuery ? data : popularMovies),
+    placeholderData: (data) => data,
   })
 }
 
