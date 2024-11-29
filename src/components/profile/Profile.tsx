@@ -35,12 +35,16 @@ function Profile({ id }: Props) {
   if (!user) return <P>Loading</P>
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="mt-4 flex flex-col gap-8">
       <div className="flex flex-row gap-4">
         <Avatar>
           <AvatarFallback>{user.name?.at(0) ?? ''}</AvatarFallback>
         </Avatar>
-        <Input value={editName} onChange={(e) => setEditName(e.target.value)} />
+        <Input
+          value={editName}
+          onChange={(e) => setEditName(e.target.value)}
+          className="max-w-xs"
+        />
         <Button
           disabled={isFetching || isPending || !editName || editName === user.name}
           onClick={() =>

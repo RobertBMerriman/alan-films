@@ -1,3 +1,4 @@
+import NavAvatar from '@/components/nav/NavAvatar'
 import { Button } from '@/components/ui/button'
 import { useAuthedUser, useGetSession } from '@/services/supabase'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -9,24 +10,36 @@ export const Route = createRootRoute({
 })
 
 function RootComponent() {
-  // TODO store sign in + public user
-
   // Preload session
   useGetSession()
-  useAuthedUser(true)
+  const { data: user, isLoading } = useAuthedUser(true)
 
   return (
-    <div className="flex flex-col gap-4 p-4 lg:container">
-      <div className="flex flex-row gap-3">
-        <Link to="/">
-          {({ isActive }) => <Button variant={isActive ? 'default' : 'outline'}>List</Button>}
-        </Link>
-        <Link to="/search">
-          {({ isActive }) => <Button variant={isActive ? 'default' : 'outline'}>Search</Button>}
-        </Link>
-        <Link to="/profile">
-          {({ isActive }) => <Button variant={isActive ? 'default' : 'outline'}>Profile</Button>}
-        </Link>
+    <div className="flex min-h-screen flex-col gap-4 p-4 lg:container">
+      <div className="flex flex-row justify-between gap-3">
+        <div className="flex flex-row gap-3">
+          <Link to="/">
+            {({ isActive }) => <Button variant={isActive ? 'default' : 'outline'}>List</Button>}
+          </Link>
+          <Link to="/search">
+            {({ isActive }) => <Button variant={isActive ? 'default' : 'outline'}>Search</Button>}
+          </Link>
+        </div>
+        {!isLoading ? (
+          user ? (
+            <Link to="/profile">
+              <NavAvatar userId={user.id} />
+            </Link>
+          ) : (
+            <Link to="/profile">
+              {({ isActive }) => (
+                <Button variant={isActive ? 'default' : 'outline'}>Profile</Button>
+              )}
+            </Link>
+          )
+        ) : (
+          <></>
+        )}
       </div>
       <Outlet />
 
