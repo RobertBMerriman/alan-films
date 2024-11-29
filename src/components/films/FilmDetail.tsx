@@ -1,8 +1,7 @@
 import type { Tables } from 'database.types'
 
 import Film from '@/components/films/Film'
-import UserAvatar from '@/components/profile/UserAvatar'
-import UserAvatarNotAdded from '@/components/profile/UserAvatarNotAdded'
+import UserFilmToggle from '@/components/profile/UserAvatar'
 import { P } from '@/components/ui/typeography'
 import { useGetMovie } from '@/services/tmdb'
 
@@ -17,17 +16,11 @@ function FilmDetail({ film, users }: Props) {
   if (isLoading) return <P>Loading...</P>
   if (!isSuccess) return <P>{error?.message}</P>
 
-  const addedUserIds = film.users.map((f) => f.id)
-  const filteredUsers = users.filter((user) => !addedUserIds.includes(user.id))
-
   return (
     <Film movie={movie}>
       <div className="flex gap-2">
-        {film.users.map((user) => (
-          <UserAvatar key={user.id} user={user} filmId={film.id} />
-        ))}
-        {filteredUsers.map((user) => (
-          <UserAvatarNotAdded key={user.id} user={user} filmId={film.id} />
+        {users.map((user) => (
+          <UserFilmToggle key={user.id} user={user} filmId={film.id} />
         ))}
       </div>
     </Film>

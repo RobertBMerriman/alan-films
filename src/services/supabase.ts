@@ -118,10 +118,12 @@ export function useGetUsersFilms(userId: string, filmId: number) {
         .eq('user_id', userId)
         .eq('film_id', filmId)
         .limit(1)
-        .single()
 
       if (res.error) throw new Error(res.error.message)
-      return res.data
+
+      const state = res.data.at(0)
+      if (state) return state
+      else return { state: undefined }
     },
   })
 }
@@ -154,6 +156,24 @@ export function useUpsertUsersFilms() {
       return await supabase
         .from('users_films')
         .upsert([{ user_id: userId, film_id: filmId, state }])
+        .select()
+    },
+  })
+}
+
+interface DeleteUsersFilms {
+  userId: string
+  filmId: number
+}
+
+export function useDeleteUsersFilms() {
+  return useMutation({
+    mutationFn: async ({ userId, filmId }: DeleteUsersFilms) => {
+      return await supabase
+        .from('users_films')
+        .delete()
+        .eq('user_id', userId)
+        .eq('film_id', filmId)
         .select()
     },
   })
