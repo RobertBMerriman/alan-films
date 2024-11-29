@@ -11,19 +11,19 @@ export type Database = {
     Tables: {
       films: {
         Row: {
-          added_user_id: string
+          added_user_id: string | null
           created_at: string
           film_id: number
           id: number
         }
         Insert: {
-          added_user_id: string
+          added_user_id?: string | null
           created_at?: string
           film_id: number
           id?: number
         }
         Update: {
-          added_user_id?: string
+          added_user_id?: string | null
           created_at?: string
           film_id?: number
           id?: number
@@ -43,19 +43,19 @@ export type Database = {
           created_at: string
           email: string
           id: string
-          name: string | null
+          name: string
         }
         Insert: {
           created_at?: string
           email: string
           id: string
-          name?: string | null
+          name?: string
         }
         Update: {
           created_at?: string
           email?: string
           id?: string
-          name?: string | null
+          name?: string
         }
         Relationships: []
       }

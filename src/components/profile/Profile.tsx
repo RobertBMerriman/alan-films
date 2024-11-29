@@ -35,7 +35,7 @@ function Profile({ id }: Props) {
   if (!user) return <P>Loading</P>
 
   return (
-    <div className="mt-4 flex flex-col gap-8">
+    <div className="mt-4 flex flex-col items-center gap-8">
       <div className="flex flex-row gap-4">
         <Avatar>
           <AvatarFallback>{user.name?.at(0) ?? ''}</AvatarFallback>
@@ -61,6 +61,7 @@ function Profile({ id }: Props) {
               onSettled: () => {
                 refetchSession()
                 refetchUser()
+                refetchPublicUser()
               },
             })
           }

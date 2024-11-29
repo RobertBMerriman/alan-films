@@ -33,7 +33,7 @@ function RootComponent() {
           ) : (
             <Link to="/profile">
               {({ isActive }) => (
-                <Button variant={isActive ? 'default' : 'outline'}>Profile</Button>
+                <Button variant={isActive ? 'default' : 'outline'}>Sign in</Button>
               )}
             </Link>
           )

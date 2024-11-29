@@ -13,30 +13,33 @@ function SignIn() {
   const [password, setPassword] = useState('')
 
   return (
-    <>
-      <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
-      <Input
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-      />
-      <Button
-        onClick={() =>
-          signIn(
-            { email, password },
-            {
-              onSuccess: () => {
-                refetchSession()
-                refetchUser()
+    <div className="flex flex-col items-center">
+      <div className="flex w-80 flex-col gap-4">
+        <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
+        <Input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+        />
+        <Button
+          onClick={() =>
+            signIn(
+              { email, password },
+              {
+                onSuccess: () => {
+                  refetchSession()
+                  refetchUser()
+                },
+                onError: (error) => alert(error.message),
               },
-              onError: (error) => alert(error.message),
-            },
-          )
-        }
-      >
-        Sign in
-      </Button>
-    </>
+            )
+          }
+        >
+          Sign in
+        </Button>
+      </div>
+    </div>
   )
 }
 

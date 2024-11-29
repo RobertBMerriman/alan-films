@@ -1,7 +1,7 @@
 import type { Tables } from 'database.types'
 
 import Film from '@/components/films/Film'
-import UserFilmToggle from '@/components/profile/UserAvatar'
+import UserFilmToggle from '@/components/profile/UserFilmToggle'
 import { P } from '@/components/ui/typeography'
 import { useGetMovie } from '@/services/tmdb'
 

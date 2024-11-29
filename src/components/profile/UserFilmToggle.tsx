@@ -35,6 +35,9 @@ function UserFilmToggle({ user, filmId }: Props) {
         onSuccess: () => {
           refetchState()
         },
+        onError: (e) => {
+          alert(e.message)
+        },
       },
     )
   }
@@ -45,6 +48,9 @@ function UserFilmToggle({ user, filmId }: Props) {
       {
         onSuccess: () => {
           refetchState()
+        },
+        onError: (e) => {
+          alert(e.message)
         },
       },
     )
