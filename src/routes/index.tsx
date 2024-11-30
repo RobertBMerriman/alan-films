@@ -1,6 +1,6 @@
 import FilmDetail from '@/components/films/FilmDetail'
 import { P } from '@/components/ui/typeography'
-import { useGetFilms, usePublicUsers } from '@/services/supabase'
+import { useAuthedUser, useGetFilms, usePublicUsers } from '@/services/supabase'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
@@ -8,19 +8,23 @@ export const Route = createFileRoute('/')({
 })
 
 function RouteComponent() {
-  const { data: films, isSuccess, isLoading } = useGetFilms()
-  const { data: allUsers, isSuccess: isSuccess2, isLoading: isLoading2 } = usePublicUsers()
+  const { isError: isAuthError } = useAuthedUser()
+  const { data: films, isSuccess: isFilmsSuccess, isLoading: isFilmsLoading } = useGetFilms()
+  const { data: allUsers, isSuccess: isUsersSuccess, isLoading: isUsersLoading } = usePublicUsers()
 
-  if (isLoading) return <P>Loading...</P>
-  if (isLoading2) return <P>Loading...</P>
-  if (!isSuccess) return <P>Error</P>
-  if (!isSuccess2) return <P>Error</P>
+  if (isFilmsLoading) return <P>Loading...</P>
+  if (isUsersLoading) return <P>Loading...</P>
+  if (!isFilmsSuccess) return <P>Error</P>
+  if (!isUsersSuccess) return <P>Error</P>
 
   return (
-    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-      {films.map((film) => (
-        <FilmDetail key={film.id} film={film} users={allUsers} />
-      ))}
-    </div>
+    <>
+      {isAuthError && <p className="text-center">Login to make changes!</p>}
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+        {films.map((film) => (
+          <FilmDetail key={film.id} film={film} users={allUsers} />
+        ))}
+      </div>
+    </>
   )
 }

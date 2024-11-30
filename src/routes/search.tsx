@@ -16,7 +16,7 @@ export const Route = createFileRoute('/search')({
 function RouteComponent() {
   const [movieSearch, setMovieSearch] = useState('')
 
-  const { data: user } = useAuthedUser(true)
+  const { data: user, isError: isAuthError } = useAuthedUser(true)
 
   const { data: popularMovies } = usePopularMovies()
   const { data: movies } = useSearchMovies(movieSearch)
@@ -53,6 +53,8 @@ function RouteComponent() {
 
   return (
     <>
+      {isAuthError && <p className="text-center">Login to make changes!</p>}
+
       <Input onChange={(e) => setMovieSearch(e.target.value)} placeholder="Search for a movie..." />
 
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
