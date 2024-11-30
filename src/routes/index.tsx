@@ -17,10 +17,10 @@ function RouteComponent() {
   if (!isSuccess2) return <P>Error</P>
 
   return (
-    <>
+    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
       {films.map((film) => (
         <FilmDetail key={film.id} film={film} users={allUsers} />
       ))}
-    </>
+    </div>
   )
 }

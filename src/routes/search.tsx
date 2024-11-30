@@ -55,19 +55,9 @@ function RouteComponent() {
     <>
       <Input onChange={(e) => setMovieSearch(e.target.value)} placeholder="Search for a movie..." />
 
-      {movies?.results.length ? (
-        movies?.results.map((movie) => (
-          <Film key={movie.id} movie={movie}>
-            <div>
-              <Button disabled={filmIds.includes(movie.id)} onClick={() => handleAddFilm(movie.id)}>
-                Add
-              </Button>
-            </div>
-          </Film>
-        ))
-      ) : !queryStartDebounce ? (
-        <>
-          {popularMovies?.results.map((movie) => (
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+        {movies?.results.length ? (
+          movies?.results.map((movie) => (
             <Film key={movie.id} movie={movie}>
               <div>
                 <Button
@@ -78,11 +68,26 @@ function RouteComponent() {
                 </Button>
               </div>
             </Film>
-          ))}
-        </>
-      ) : (
-        !!predictedQueryEndDebouce && <P>No results</P>
-      )}
+          ))
+        ) : !queryStartDebounce ? (
+          <>
+            {popularMovies?.results.map((movie) => (
+              <Film key={movie.id} movie={movie}>
+                <div>
+                  <Button
+                    disabled={filmIds.includes(movie.id)}
+                    onClick={() => handleAddFilm(movie.id)}
+                  >
+                    Add
+                  </Button>
+                </div>
+              </Film>
+            ))}
+          </>
+        ) : (
+          !!predictedQueryEndDebouce && <P>No results</P>
+        )}
+      </div>
     </>
   )
 }

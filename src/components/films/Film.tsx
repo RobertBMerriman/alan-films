@@ -9,7 +9,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 function Film({ movie, children }: Props) {
   return (
     <div className="flex gap-2 rounded-xl border p-2 md:gap-4 md:p-4">
-      <div className="aspect-[2/3] min-w-28 self-start md:min-w-36">
+      <div className="aspect-[2/3] min-w-28 self-start">
         <img className="rounded-lg" src={tmdbImageUrl(movie.poster_path)} alt={movie.title} />
       </div>
       <div className="flex flex-col gap-3">
