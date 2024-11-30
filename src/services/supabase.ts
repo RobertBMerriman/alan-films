@@ -122,7 +122,7 @@ export function useGetUsersFilms(userId: string, filmId: number) {
       if (res.error) throw new Error(res.error.message)
 
       const state = res.data.at(0)
-      if (state) return state
+      if (state) return state as { state: UserFilmState }
       else return { state: undefined }
     },
   })
@@ -156,10 +156,12 @@ export function useDeleteFilm() {
   })
 }
 
+export type UserFilmState = 'interested' | 'maybe' | 'not_interested'
+
 interface AddUsersFilms {
   userId: string
   filmId: number
-  state: 'interested' | 'maybe'
+  state: UserFilmState
 }
 
 export function useUpsertUsersFilms() {
