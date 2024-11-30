@@ -76,7 +76,7 @@ function UserFilmToggle({ user, filmId }: Props) {
             {user.name?.at(0) ?? '-'}
           </AvatarFallback>
         </Avatar>
-        <p className="z-30 -mt-4 text-2xl">
+        <p className="z-30 -mt-4 h-[1em] text-2xl">
           {state === 'interested' && '🤩'}
           {state === 'maybe' && '🤔'}
           {state === 'not_interested' && '🫥'}
