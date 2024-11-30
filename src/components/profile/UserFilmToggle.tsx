@@ -34,6 +34,7 @@ function UserFilmToggle({ user, filmId }: Props) {
       {
         onSuccess: () => {
           refetchState()
+          setOpen(false)
         },
         onError: (e) => {
           alert(e.message)
@@ -48,6 +49,7 @@ function UserFilmToggle({ user, filmId }: Props) {
       {
         onSuccess: () => {
           refetchState()
+          setOpen(false)
         },
         onError: (e) => {
           alert(e.message)

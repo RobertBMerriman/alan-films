@@ -14,7 +14,7 @@ function SignIn() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex w-80 flex-col gap-4">
+      <div className="flex w-full flex-col gap-4 sm:w-64">
         <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
         <Input
           type="password"

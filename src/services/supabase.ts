@@ -144,6 +144,18 @@ export function useAddFilm() {
   })
 }
 
+interface DeleteFilm {
+  id: number
+}
+
+export function useDeleteFilm() {
+  return useMutation({
+    mutationFn: async ({ id }: DeleteFilm) => {
+      return await supabase.from('films').delete().eq('id', id).select()
+    },
+  })
+}
+
 interface AddUsersFilms {
   userId: string
   filmId: number

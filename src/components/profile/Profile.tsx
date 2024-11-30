@@ -40,11 +40,7 @@ function Profile({ id }: Props) {
         <Avatar>
           <AvatarFallback>{user.name?.at(0) ?? ''}</AvatarFallback>
         </Avatar>
-        <Input
-          value={editName}
-          onChange={(e) => setEditName(e.target.value)}
-          className="max-w-xs"
-        />
+        <Input value={editName} onChange={(e) => setEditName(e.target.value)} className="md:w-64" />
         <Button
           disabled={isFetching || isPending || !editName || editName === user.name}
           onClick={() =>
@@ -56,6 +52,8 @@ function Profile({ id }: Props) {
       </div>
       <div>
         <Button
+          variant={'destructive'}
+          size={'sm'}
           onClick={() =>
             signOut(undefined, {
               onSettled: () => {
