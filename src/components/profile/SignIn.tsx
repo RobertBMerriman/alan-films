@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useAuthedUser, useGetSession, useSignIn } from '@/services/supabase'
+import { useNavigate } from '@tanstack/react-router'
 
 function SignIn() {
   const { refetch: refetchSession } = useGetSession()
@@ -11,6 +12,8 @@ function SignIn() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
+  const navigate = useNavigate()
 
   return (
     <div className="flex flex-col items-center">
@@ -30,6 +33,7 @@ function SignIn() {
                 onSuccess: () => {
                   refetchSession()
                   refetchUser()
+                  navigate({ to: '/' })
                 },
                 onError: (error) => alert(error.message),
               },
