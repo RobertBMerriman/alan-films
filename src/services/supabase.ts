@@ -84,7 +84,7 @@ export function usePublicUsers() {
   return useQuery({
     queryKey: ['supabase-public-users'],
     queryFn: async () => {
-      const res = await supabase.from('users').select().order('id')
+      const res = await supabase.from('users').select().order('created_at')
 
       if (res.error) throw new Error(res.error.message)
       return res.data
