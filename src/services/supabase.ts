@@ -83,7 +83,7 @@ export function usePublicUsers() {
   return useQuery({
     queryKey: ['supabase-public-users'],
     queryFn: async () => {
-      const res = await supabase.from('users').select().order('id')
+      const res = await supabase.from('users').select().order('created_at')
 
       if (res.error) throw new Error(res.error.message)
       return res.data
@@ -98,11 +98,48 @@ export function useGetFilms() {
     queryFn: async () => {
       const res = await supabase
         .from('films')
-        .select('*, users!users_films ( * )')
+        .select('*, users_films ( * )')
+        // .select('*, users_films:id ( * ), users!users_films ( * )')
         .order('created_at', { ascending: false })
+      // .order('state', { referencedTable: 'users_films', ascending: true })
 
       if (res.error) throw new Error(res.error.message)
-      return res.data
+
+      return res.data.toSorted((a, b) => {
+        const aInterested = a.users_films.reduce(
+          (prev, curr) => prev + (curr.state === 'interested' ? 1 : 0),
+          0,
+        )
+        const bInterested = b.users_films.reduce(
+          (prev, curr) => prev + (curr.state === 'interested' ? 1 : 0),
+          0,
+        )
+        if (aInterested !== bInterested) {
+          return aInterested > bInterested ? -1 : 1
+        }
+
+        const aMaybe = a.users_films.reduce(
+          (prev, curr) => prev + (curr.state === 'maybe' ? 1 : 0),
+          0,
+        )
+        const bMaybe = b.users_films.reduce(
+          (prev, curr) => prev + (curr.state === 'maybe' ? 1 : 0),
+          0,
+        )
+        if (aMaybe !== bMaybe) {
+          return aMaybe > bMaybe ? -1 : 1
+        }
+
+        const aNot = a.users_films.reduce(
+          (prev, curr) => prev + (curr.state === 'not_interested' ? 1 : 0),
+          0,
+        )
+        const bNot = b.users_films.reduce(
+          (prev, curr) => prev + (curr.state === 'not_interested' ? 1 : 0),
+          0,
+        )
+        return bNot > aNot ? -1 : 1
+      })
     },
     staleTime: 1000,
   })

@@ -62,17 +62,17 @@ export type Database = {
       users_films: {
         Row: {
           film_id: number
-          state: string | null
+          state: string
           user_id: string
         }
         Insert: {
           film_id: number
-          state?: string | null
+          state?: string
           user_id: string
         }
         Update: {
           film_id?: number
-          state?: string | null
+          state?: string
           user_id?: string
         }
         Relationships: [

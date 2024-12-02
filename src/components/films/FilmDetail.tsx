@@ -10,7 +10,7 @@ import { useAuthedUser, useDeleteFilm, useGetFilms } from '@/services/supabase'
 import { useGetMovie } from '@/services/tmdb'
 
 interface Props {
-  film: Tables<'films'> & { users: Tables<'users'>[] }
+  film: Tables<'films'> & { users_films: Tables<'users_films'>[] }
   users: Tables<'users'>[]
 }
 
