@@ -127,7 +127,19 @@ export function useGetFilms() {
           (prev, curr) => prev + (curr.state === 'maybe' ? 1 : 0),
           0,
         )
-        return aMaybe > bMaybe ? -1 : 1
+        if (aMaybe !== bMaybe) {
+          return aMaybe > bMaybe ? -1 : 1
+        }
+
+        const aNot = a.users_films.reduce(
+          (prev, curr) => prev + (curr.state === 'not_interested' ? 1 : 0),
+          0,
+        )
+        const bNot = b.users_films.reduce(
+          (prev, curr) => prev + (curr.state === 'not_interested' ? 1 : 0),
+          0,
+        )
+        return bNot > aNot ? -1 : 1
       })
     },
   })
