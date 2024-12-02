@@ -1,13 +1,14 @@
-import { useState } from 'react'
-
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
 import { usePublicUsers } from '@/services/supabase'
 
-function UserFilters() {
-  const { data: users } = usePublicUsers()
+interface Props {
+  userIds: string[]
+  setUserIds: React.Dispatch<React.SetStateAction<string[]>>
+}
 
-  const [userIds, setUserIds] = useState<string[]>([])
+function UserFilters({ userIds, setUserIds }: Props) {
+  const { data: users } = usePublicUsers()
 
   if (!users) return <></>
 
