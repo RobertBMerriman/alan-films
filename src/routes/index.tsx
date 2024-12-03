@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import FilmDetail from '@/components/films/FilmDetail'
+import FilmAdded from '@/components/films/FilmAdded'
 import UserFilters from '@/components/films/UserFilters'
 import { P } from '@/components/ui/typeography'
 import { useAuthedUser, useGetFilms, usePublicUsers } from '@/services/supabase'
@@ -38,7 +38,7 @@ function RouteComponent() {
 
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         {filteredFilms.map((film) => (
-          <FilmDetail key={film.id} film={film} users={allUsers} />
+          <FilmAdded key={film.id} film={film} users={allUsers} />
         ))}
       </div>
     </>
