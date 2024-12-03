@@ -14,7 +14,7 @@ function UserFilters({ userIds, setUserIds }: Props) {
 
   return (
     <div className="ml-2 flex flex-row items-center justify-center gap-2">
-      <span className="whitespace-nowrap">Who's in?</span>
+      <span className="whitespace-nowrap text-lg md:text-xl">Who's in?</span>
       <div className="flex flex-row flex-wrap justify-center gap-2">
         {users.map((user) => (
           <Avatar

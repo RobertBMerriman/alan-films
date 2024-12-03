@@ -43,8 +43,12 @@ function RootComponent() {
       </div>
       <Outlet />
 
-      <TanStackRouterDevtools />
-      <ReactQueryDevtools />
+      {import.meta.env.DEV && (
+        <>
+          <TanStackRouterDevtools />
+          <ReactQueryDevtools />
+        </>
+      )}
     </div>
   )
 }

@@ -1,4 +1,5 @@
 import type { Tables } from 'database.types'
+import { useEffect } from 'react'
 
 import {
   Dialog,
@@ -18,7 +19,13 @@ interface Props {
   film: Tables<'films'> & { users_films: Tables<'users_films'>[] }
 }
 
-function FilmDetailDialog({ open, setOpen, movie }: Props) {
+function FilmDetailDialog({ open, setOpen, movie, film }: Props) {
+  useEffect(() => {
+    if (open) {
+      console.log(movie)
+    }
+  }, [open, movie])
+
   return (
     <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
       <DialogContent>
@@ -26,6 +33,13 @@ function FilmDetailDialog({ open, setOpen, movie }: Props) {
           <DialogTitle>{movie.title}</DialogTitle>
           <DialogDescription>{movie.overview}</DialogDescription>
         </DialogHeader>
+        <a
+          href={`https://www.themoviedb.org/movie/${film.film_id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Open on TMDB
+        </a>
       </DialogContent>
     </Dialog>
   )
