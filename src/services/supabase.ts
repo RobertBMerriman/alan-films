@@ -16,11 +16,7 @@ export function useSignIn() {
   return useMutation({
     mutationFn: async ({ email, password }: SignIn) => {
       const res = await supabase.auth.signInWithPassword({
-        // email: 'robertbmerriman@gmail.com',
-        // email: 'therobz12@gmail.com',
-        // email: 'robert@alteam.io',
         email,
-        // password: import.meta.env.VITE_TEMP_PW,
         password,
       })
 
@@ -51,6 +47,7 @@ export function useGetSession() {
       if (res.error) throw new Error(res.error.message)
       return res.data
     },
+    staleTime: 1000,
   })
 }
 
@@ -65,6 +62,7 @@ export function useAuthedUser(session = false) {
     },
     enabled: session,
     retry: false,
+    staleTime: 1000,
   })
 }
 
@@ -77,6 +75,7 @@ export function usePublicUser(id: string) {
       if (res.error) throw new Error(res.error.message)
       return res.data
     },
+    staleTime: 1000,
   })
 }
 
@@ -142,6 +141,7 @@ export function useGetFilms() {
         return bNot > aNot ? -1 : 1
       })
     },
+    staleTime: 1000,
   })
 }
 
@@ -162,6 +162,7 @@ export function useGetUsersFilms(userId: string, filmId: number) {
       if (state) return state as { state: UserFilmState }
       else return { state: undefined }
     },
+    staleTime: 1000,
   })
 }
 
