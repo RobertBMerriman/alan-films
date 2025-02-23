@@ -182,6 +182,19 @@ export function useAddFilm() {
   })
 }
 
+interface UpdateFilmWatched {
+  id: number
+  watched: boolean
+}
+
+export function useUpdateFilmWatched() {
+  return useMutation({
+    mutationFn: async ({ id, watched }: UpdateFilmWatched) => {
+      return await supabase.from('films').update({ watched }).eq('id', id).select()
+    },
+  })
+}
+
 interface DeleteFilm {
   id: number
 }

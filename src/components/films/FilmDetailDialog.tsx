@@ -1,6 +1,7 @@
 import type { Tables } from 'database.types'
 import { useEffect } from 'react'
 
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -8,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { useGetFilms, useUpdateFilmWatched } from '@/services/supabase'
 import type { MovieDetail } from '@/services/tmdb'
 import type { User } from '@supabase/supabase-js'
 
@@ -20,6 +22,9 @@ interface Props {
 }
 
 function FilmDetailDialog({ open, setOpen, movie, film }: Props) {
+  const { mutate: updateWatched } = useUpdateFilmWatched()
+  const { refetch: refetchFilms } = useGetFilms()
+
   useEffect(() => {
     if (open) {
       console.log(movie)
@@ -33,6 +38,16 @@ function FilmDetailDialog({ open, setOpen, movie, film }: Props) {
           <DialogTitle>{movie.title}</DialogTitle>
           <DialogDescription>{movie.overview}</DialogDescription>
         </DialogHeader>
+        <Button
+          onClick={() =>
+            updateWatched(
+              { id: film.id, watched: !film.watched },
+              { onSuccess: () => refetchFilms() },
+            )
+          }
+        >
+          Mark {!film.watched ? 'watched' : 'unwatched'}
+        </Button>
         <a
           href={`https://www.themoviedb.org/movie/${film.film_id}`}
           target="_blank"

@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import FilmAdded from '@/components/films/FilmAdded'
 import UserFilters from '@/components/films/UserFilters'
+import { Button } from '@/components/ui/button'
 import { H3, P } from '@/components/ui/typeography'
 import { partition } from '@/lib/utils'
 import { useAuthedUser, useGetFilms, usePublicUsers } from '@/services/supabase'
@@ -17,6 +18,7 @@ function RouteComponent() {
   const { data: allUsers, isSuccess: isUsersSuccess, isLoading: isUsersLoading } = usePublicUsers()
 
   const [userIds, setUserIds] = useState<string[]>([])
+  const [watched, setWatched] = useState(false)
 
   if (isFilmsLoading) return <P>Loading...</P>
   if (isUsersLoading) return <P>Loading...</P>
@@ -24,6 +26,8 @@ function RouteComponent() {
   if (!isUsersSuccess) return <P>Error</P>
 
   const filmsForWhosIn = films.filter((film) => {
+    if (film.watched !== watched) return false
+
     const interestedIds = film.users_films
       .filter((uf) => uf.state === 'interested')
       .map((uf) => uf.user_id)
@@ -40,6 +44,10 @@ function RouteComponent() {
   return (
     <>
       {isAuthError && <p className="text-center">Login to make changes!</p>}
+
+      <Button onClick={() => setWatched(!watched)}>
+        {!watched ? 'See watched' : 'See unwatched'}
+      </Button>
 
       <UserFilters userIds={userIds} setUserIds={setUserIds} />
 

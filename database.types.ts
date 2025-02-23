@@ -15,18 +15,21 @@ export type Database = {
           created_at: string
           film_id: number
           id: number
+          watched: boolean
         }
         Insert: {
           added_user_id?: string | null
           created_at?: string
           film_id: number
           id?: number
+          watched?: boolean
         }
         Update: {
           added_user_id?: string | null
           created_at?: string
           film_id?: number
           id?: number
+          watched?: boolean
         }
         Relationships: [
           {
